@@ -16,5 +16,5 @@ url = 'https://raw.githubusercontent.com/nurinn-bot/SV-TT/refs/heads/main/export
 
 # Load data from the remote CSV file
 # Consider using @st.cache_data for improved performance in a real Streamlit app
-GP_df = pd.read_csv(url)
+df = pd.read_csv(url)
 )
