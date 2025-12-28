@@ -17,7 +17,6 @@ url = 'https://raw.githubusercontent.com/nurinn-bot/SV-TT/refs/heads/main/export
 # Load data from the remote CSV file
 # Consider using @st.cache_data for improved performance in a real Streamlit app
 df = pd.read_csv(url)
-)
 
 # Create a pie chart using Plotly
 # --- 1️⃣ Distribution of Gender (Pie Chart) ---
