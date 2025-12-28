@@ -41,6 +41,7 @@ fig = px.histogram(
     color_discrete_sequence=px.colors.qualitative.Pastel
 )
 
+#--- Impulse Buying Score by Age Group ---
 fig.update_layout(
     xaxis_title='Age Group',
     yaxis_title='Count',
@@ -50,25 +51,22 @@ fig.update_layout(
 
 st.plotly_chart(fig, use_container_width=True)
 
-# Calculate the average ImpulseBuying score for each gender
-average_impulse_buying = (
-    df.groupby('Gender', as_index=False)['ImpulseBuying']
-      .mean()
-)
-
-fig = px.bar(
-    average_impulse_buying,
-    x='Gender',
+fig = px.box(
+    df,
+    x='Age',
     y='ImpulseBuying',
-    title='Average Impulse Buying Score by Gender',
-    color='Gender',
+    color='Age',
+    title='Impulse Buying Score by Age Group',
     color_discrete_sequence=px.colors.qualitative.Pastel
 )
 
 fig.update_layout(
-    xaxis_title='Gender',
-    yaxis_title='Average Impulse Buying Score',
+    xaxis_title='Age Group',
+    yaxis_title='Impulse Buying Score',
     showlegend=False
 )
+
+fig.update_xaxes(tickangle=45)
+fig.update_traces(boxmean='sd')  # shows mean and SD for each box
 
 st.plotly_chart(fig, use_container_width=True)
