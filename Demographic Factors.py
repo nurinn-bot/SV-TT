@@ -15,7 +15,7 @@ url = 'https://raw.githubusercontent.com/nurinn-bot/SV-TT/main/exported_datafram
 
 df = pd.read_csv(url)
 
-# --- 2. Distribution of Gender (Pie Chart) ---
+# --- Distribution of Gender (Pie Chart) ---
 gender_counts = df['Gender'].value_counts().reset_index()
 gender_counts.columns = ['Gender', 'Count']
 
@@ -28,5 +28,24 @@ fig = px.pie(
 )
 
 fig.update_traces(textinfo='percent+label')
+
+st.plotly_chart(fig, use_container_width=True)
+
+#--- Relationship Between Age and Average Monthly Income (CountPlot) ---
+fig = px.histogram(
+    df,
+    x='Age',
+    color='Average Monthly Income (in RM)',
+    barmode='group',
+    title='Relationship Between Age and Average Monthly Income',
+    color_discrete_sequence=px.colors.qualitative.Pastel
+)
+
+fig.update_layout(
+    xaxis_title='Age Group',
+    yaxis_title='Count',
+    legend_title='Average Monthly Income (in RM)',
+    xaxis_tickangle=45
+)
 
 st.plotly_chart(fig, use_container_width=True)
