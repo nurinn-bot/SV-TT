@@ -49,3 +49,26 @@ fig.update_layout(
 )
 
 st.plotly_chart(fig, use_container_width=True)
+
+# Calculate the average ImpulseBuying score for each gender
+average_impulse_buying = (
+    df.groupby('Gender', as_index=False)['ImpulseBuying']
+      .mean()
+)
+
+fig = px.bar(
+    average_impulse_buying,
+    x='Gender',
+    y='ImpulseBuying',
+    title='Average Impulse Buying Score by Gender',
+    color='Gender',
+    color_discrete_sequence=px.colors.qualitative.Pastel
+)
+
+fig.update_layout(
+    xaxis_title='Gender',
+    yaxis_title='Average Impulse Buying Score',
+    showlegend=False
+)
+
+st.plotly_chart(fig, use_container_width=True)
