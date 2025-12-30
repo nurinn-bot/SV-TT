@@ -41,32 +41,11 @@ fig = px.histogram(
     color_discrete_sequence=px.colors.qualitative.Pastel
 )
 
-#--- Impulse Buying Score by Age Group ---
 fig.update_layout(
     xaxis_title='Age Group',
     yaxis_title='Count',
     legend_title='Average Monthly Income (in RM)',
     xaxis_tickangle=45
 )
-
-st.plotly_chart(fig, use_container_width=True)
-
-fig = px.box(
-    df,
-    x='Age',
-    y='ImpulseBuying',
-    color='Age',
-    title='Impulse Buying Score by Age Group',
-    color_discrete_sequence=px.colors.qualitative.Pastel
-)
-
-fig.update_layout(
-    xaxis_title='Age Group',
-    yaxis_title='Impulse Buying Score',
-    showlegend=False
-)
-
-fig.update_xaxes(tickangle=45)
-fig.update_traces(boxmean='sd')  # shows mean and SD for each box
 
 st.plotly_chart(fig, use_container_width=True)
