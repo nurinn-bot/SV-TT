@@ -98,3 +98,26 @@ fig.update_layout(
 )
 
 st.plotly_chart(fig, use_container_width=True)
+
+#--- Impulse Buying Score by age group ---
+df['age'] = df['age'].astype(str)
+df['monthly_income'] = df['monthly_income'].astype(str)
+
+fig = px.histogram(
+    df,
+    x='age',
+    color='monthly_income',
+    barmode='group',
+    title='Relationship Between Age and Average Monthly Income',
+    color_discrete_sequence=px.colors.qualitative.Pastel
+)
+
+fig.update_layout(
+    xaxis_title='Age Group',
+    yaxis_title='Count',
+    legend_title='Average Monthly Income (in RM)'
+)
+
+fig.update_xaxes(tickangle=45)
+
+st.plotly_chart(fig, use_container_width=True)
