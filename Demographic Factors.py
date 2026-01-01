@@ -15,8 +15,57 @@ url = 'https://raw.githubusercontent.com/nurinn-bot/SV-TT/refs/heads/main/cleane
 
 df = pd.read_csv(url)
 
+df['Scarcity'] = df[[
+ 'promo_deadline_focus',
+ 'promo_time_worry',
+ 'limited_quantity_concern',
+ 'out_of_stock_worry'
+]].mean(axis=1)
+
+df['Serendipity'] = df[[
+ 'product_recall_exposure',
+ 'surprise_finds',
+ 'exceeds_expectations',
+ 'fresh_interesting_info',
+ 'relevant_surprising_info'
+]].mean(axis=1)
+
+df['Trust'] = df[[
+ 'trust_no_risk',
+ 'trust_reliable',
+ 'trust_variety_meets_needs',
+ 'trust_sells_honestly',
+ 'trust_quality_matches_description'
+]].mean(axis=1)
+
+df['Motivation'] = df[[
+ 'relax_reduce_stress',
+ 'motivated_by_discount_promo',
+ 'motivated_by_gifts'
+]].mean(axis=1)
+
+df['BrandDesign'] = df[[
+ 'similar_to_famous_brand_attraction',
+ 'new_product_urgency',
+ 'brand_trust_influence',
+ 'unique_design_attraction'
+]].mean(axis=1)
+
+df['Quality'] = df[[
+ 'product_description_quality',
+ 'image_quality_influence',
+ 'multi_angle_visuals',
+ 'info_richness_support'
+]].mean(axis=1)
+
+df['ImpulseBuying'] = df[[
+ 'no_purchase_plan',
+ 'no_purchase_intent',
+ 'impulse_purchase'
+]].mean(axis=1)
+
 # --- Distribution of Gender (Pie Chart) ---
-gender_counts = df['Gender'].value_counts().reset_index()
+gender_counts = df['gender'].value_counts().reset_index()
 gender_counts.columns = ['Gender', 'Count']
 
 fig = px.pie(
@@ -34,8 +83,8 @@ st.plotly_chart(fig, use_container_width=True)
 #--- Relationship Between Age and Average Monthly Income (CountPlot) ---
 fig = px.histogram(
     df,
-    x='Age',
-    color='Average Monthly Income (in RM)',
+    x='age',
+    color='monthly_income',
     barmode='group',
     title='Relationship Between Age and Average Monthly Income',
     color_discrete_sequence=px.colors.qualitative.Pastel
