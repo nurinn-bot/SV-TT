@@ -102,14 +102,11 @@ st.plotly_chart(fig, use_container_width=True)
 #--- Impulse Buying Score by age group ---
 fig = px.box(
     df,
-    x='age',
+    x='Age',
     y='ImpulseBuying',
-    color='age',
-    title='Impulse Buying Score by Age Group',
-    color_discrete_sequence=px.colors.qualitative.Pastel
+    title='Impulse Buying Score by Age Group'
 )
 
-fig.update_layout(showlegend=False)
 fig.update_xaxes(tickangle=45)
 
 st.plotly_chart(fig, use_container_width=True)
