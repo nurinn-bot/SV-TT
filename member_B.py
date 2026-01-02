@@ -30,14 +30,14 @@ def app():
         'promo_deadline_focus',
         'promo_time_worry',
         'limited_quantity_concern',
-        'out_of_stock_worry’ 
+        'out_of_stock_worry' 
     ]
 
     Serendipity = [
-        'product_recall_exposure’,
-        'surprise_finds’,
-        ‘exceeds_expectations’,
-        ‘fresh_interesting_info’,
+        'product_recall_exposure',
+        'surprise_finds',
+        'exceeds_expectations',
+        'fresh_interesting_info',
         'relevant_surprising_info'
     ]
 
