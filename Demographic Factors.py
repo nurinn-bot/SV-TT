@@ -14,13 +14,17 @@ st.set_page_config(
 st.header("Demographic Factors on Impulse Buying in TikTok Shop 🛍️", divider="blue")
 
 # --- 1. DATA LOADING FROM URL ---
-url = 'https://raw.githubusercontent.com/nurinn-bot/SV-TT/refs/heads/main/exported_dataframe%20(1).csv'
+url = 'https://raw.githubusercontent.com/nurinn-bot/SV-TT/refs/heads/main/TikTok_DataFrame.csv'
 
 df = pd.read_csv(url)
 
-st.subheader("Dataset Preview")
-st.write(df.head())
-st.write("Columns:", df.columns.tolist())
+# Calculate the counts and reset the index to create a Plotly-friendly DataFrame
+# Assumes the loaded CSV has a column named 'Gender'
+gender_counts_df = arts_df['Gender'].value_counts().reset_index()
+gender_counts_df.columns = ['Gender', 'Count']
+
+st.write("Data summary (Counts):")
+st.dataframe(gender_counts_df, hide_index=True)
 
 df['Scarcity'] = df[[
  'promo_deadline_focus',
