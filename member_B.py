@@ -1,69 +1,51 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import matplotlib.pyplot as plt
+import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-
 def app():
     st.header(
-        "Sub-Objective 3: Examine Trust, Enjoyment & Shopping Motivation on TikTok Shop"
+        "Sub-Objective 2: Evaluate the Influence of Scarcity and Unexpected Discovery on Shopping Behavior"
     )
 
-# --- 1. DATA LOADING FROM URL ---
-url = 'https://raw.githubusercontent.com/nurinn-bot/SV-TT/refs/heads/main/TikTok_DataFrame.csv'
+    # --------------------------------------------------
+    #  Problem Statement
+    # --------------------------------------------------
+    st.subheader("Problem Statement")
+    st.write("""
+    Scarcity cues such as time-limited promotions and limited product availability, as well as unexpected product discovery, are commonly used in digital commerce.
+    However, without proper analysis, it is difficult to determine how strongly these factors influence users’ shopping perceptions and behaviors.
+    """)
 
-df = pd.read_csv(url)
+    # --------------------------------------------------
+    # Load dataset
+    # --------------------------------------------------
+    df = pd.read_excel("cleaned_tiktok_data.xlsx")
 
-df['Scarcity'] = df[[
- 'promo_deadline_focus',
- 'promo_time_worry',
- 'limited_quantity_concern',
- 'out_of_stock_worry'
-]].mean(axis=1)
+    # --------------------------------------------------
+    # Define factor groups
+    # --------------------------------------------------
+    Scarcity = [
+        'promo_deadline_focus',
+        'promo_time_worry,
+        'limited_quantity_concern',
+        'out_of_stock_worry’ 
+    ]
 
-df['Serendipity'] = df[[
- 'product_recall_exposure',
- 'surprise_finds',
- 'exceeds_expectations',
- 'fresh_interesting_info',
- 'relevant_surprising_info'
-]].mean(axis=1)
+    Serendipity = [
+        'product_recall_exposure’,
+        'surprise_finds’,
+        ‘exceeds_expectations’,
+        ‘fresh_interesting_info’,
+        'relevant_surprising_info'
+    ]
 
-df['Trust'] = df[[
- 'trust_no_risk',
- 'trust_reliable',
- 'trust_variety_meets_needs',
- 'trust_sells_honestly',
- 'trust_quality_matches_description'
-]].mean(axis=1)
-
-df['Motivation'] = df[[
- 'relax_reduce_stress',
- 'motivated_by_discount_promo',
- 'motivated_by_gifts'
-]].mean(axis=1)
-
-df['BrandDesign'] = df[[
- 'similar_to_famous_brand_attraction',
- 'new_product_urgency',
- 'brand_trust_influence',
- 'unique_design_attraction'
-]].mean(axis=1)
-
-df['Quality'] = df[[
- 'product_description_quality',
- 'image_quality_influence',
- 'multi_angle_visuals',
- 'info_richness_support'
-]].mean(axis=1)
-
-df['ImpulseBuying'] = df[[
- 'no_purchase_plan',
- 'no_purchase_intent',
- 'impulse_purchase'
-]].mean(axis=1)
-
+    # --------------------------------------------------
+    # Create composite scores
+    # --------------------------------------------------
 # Create a sub-dataframe with only 'Scarcity' and 'Serendipity'
 correlation_data = df[['Scarcity', 'Serendipity']]
 
