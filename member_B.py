@@ -12,7 +12,9 @@ def app():
     # --------------------------------------------------
     #  Problem Statement
     # --------------------------------------------------
+
     st.subheader("Problem Statement")
+    
     st.write("""
     Scarcity cues such as time-limited promotions and limited product availability, as well as unexpected product discovery, are commonly used in digital commerce.
     However, without proper analysis, it is difficult to determine how strongly these factors influence users’ shopping perceptions and behaviors.
@@ -26,6 +28,7 @@ def app():
     # --------------------------------------------------
     # Define factor groups
     # --------------------------------------------------
+    
     Scarcity = [
         'promo_deadline_focus',
         'promo_time_worry',
@@ -44,6 +47,7 @@ def app():
     # --------------------------------------------------
     # Create composite scores
     # --------------------------------------------------
+    
 # Create a sub-dataframe with only 'Scarcity' and 'Serendipity'
 correlation_data = df[['Scarcity', 'Serendipity']]
 
