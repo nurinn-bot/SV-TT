@@ -90,7 +90,7 @@ fig.update_layout(
     yaxis_title="Variables"
 )
 
-fig.show()
+st.plotly_chart(fig, use_container_width=True)
 
 # Calculate the average Scarcity and Serendipity scores by monthly_income
 average_scores_by_income = (
@@ -140,7 +140,7 @@ fig.update_layout(
     legend_title_text='Score Type'
 )
 
-fig.show()
+st.plotly_chart(fig, use_container_width=True)
 
 # Calculate the average Scarcity and Serendipity scores by gender
 average_scores_by_gender = (
@@ -179,7 +179,7 @@ fig.update_layout(
     legend_title_text='Score Type'
 )
 
-fig.show()
+st.plotly_chart(fig, use_container_width=True)
 
 # Create subplots: 1 row, 2 columns
 fig = make_subplots(
@@ -220,7 +220,7 @@ fig.update_layout(
 fig.update_yaxes(title_text="Scarcity Score", row=1, col=1)
 fig.update_yaxes(title_text="Serendipity Score", row=1, col=2)
 
-fig.show()
+st.plotly_chart(fig, use_container_width=True)
 
 # Create subplots
 fig = make_subplots(
@@ -264,4 +264,4 @@ fig.update_xaxes(title_text="Scarcity Score", row=1, col=1)
 fig.update_xaxes(title_text="Serendipity Score", row=1, col=2)
 fig.update_yaxes(title_text="Frequency")
 
-fig.show()
+st.plotly_chart(fig, use_container_width=True)
