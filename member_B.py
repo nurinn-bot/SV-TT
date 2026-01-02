@@ -28,7 +28,7 @@ def app():
     # --------------------------------------------------
     Scarcity = [
         'promo_deadline_focus',
-        'promo_time_worry,
+        'promo_time_worry',
         'limited_quantity_concern',
         'out_of_stock_worry’ 
     ]
