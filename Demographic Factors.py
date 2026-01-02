@@ -5,13 +5,10 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 
-# --- Streamlit Configuration ---
-st.set_page_config(
-    page_title="Demographic Factors",
-    layout="wide"
-)
-
-st.header("Demographic Factors on Impulse Buying in TikTok Shop 🛍️", divider="blue")
+def app():
+    st.header(
+        "Sub-Objective 3: Examine Trust, Enjoyment & Shopping Motivation on TikTok Shop"
+    )
 
 # --- 1. DATA LOADING FROM URL ---
 url = 'https://raw.githubusercontent.com/nurinn-bot/SV-TT/refs/heads/main/TikTok_DataFrame.csv'
