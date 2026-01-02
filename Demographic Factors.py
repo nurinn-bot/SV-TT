@@ -14,7 +14,7 @@ st.set_page_config(
 st.header("Demographic Factors on Impulse Buying in TikTok Shop 🛍️", divider="blue")
 
 # --- 1. DATA LOADING FROM URL ---
-url = 'https://raw.githubusercontent.com/nurinn-bot/SV-TT/refs/heads/main/cleaned_dataset.csv'
+url = 'https://raw.githubusercontent.com/nurinn-bot/SV-TT/refs/heads/main/exported_dataframe%20(1).csv'
 
 df = pd.read_csv(url)
 
