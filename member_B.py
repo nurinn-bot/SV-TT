@@ -10,33 +10,38 @@ def app():
     )
 
     # --------------------------------------------------
-    #  Problem Statement
+    # Problem Statement
     # --------------------------------------------------
-
     st.subheader("Problem Statement")
-    
     st.write("""
-    Scarcity cues such as time-limited promotions and limited product availability, as well as unexpected product discovery, are commonly used in digital commerce.
-    However, without proper analysis, it is difficult to determine how strongly these factors influence users’ shopping perceptions and behaviors.
+    Scarcity cues such as time-limited promotions and limited product availability, as well as unexpected product discovery, 
+    are commonly used in digital commerce. Without proper analysis, it is difficult to determine how strongly these factors 
+    influence users’ shopping perceptions and behaviors.
     """)
 
     # --------------------------------------------------
     # Load dataset
     # --------------------------------------------------
-    df = pd.read_excel("cleaned_tiktok_data.xlsx")
+    try:
+        df = pd.read_excel("cleaned_tiktok_data.xlsx")  # or pd.read_csv("TikTok_DataFrame.csv")
+        st.success("Dataset loaded successfully!")
+        st.dataframe(df.head())
+    except Exception as e:
+        st.error("Failed to load dataset.")
+        st.exception(e)
+        st.stop()
 
     # --------------------------------------------------
     # Define factor groups
     # --------------------------------------------------
-    
-    Scarcity = [
+    Scarcity_vars = [
         'promo_deadline_focus',
         'promo_time_worry',
         'limited_quantity_concern',
         'out_of_stock_worry' 
     ]
 
-    Serendipity = [
+    Serendipity_vars = [
         'product_recall_exposure',
         'surprise_finds',
         'exceeds_expectations',
@@ -47,14 +52,13 @@ def app():
     # --------------------------------------------------
     # Create composite scores
     # --------------------------------------------------
-    
-    # Create a sub-dataframe with only 'Scarcity' and 'Serendipity'
-    correlation_data = df[['Scarcity', 'Serendipity']]
+    df['Scarcity'] = df[Scarcity_vars].mean(axis=1)
+    df['Serendipity'] = df[Serendipity_vars].mean(axis=1)
 
-    # Calculate the correlation matrix
-    correlation_matrix = correlation_data.corr()
-
-    # Create interactive heatmap
+    # --------------------------------------------------
+    # Correlation heatmap
+    # --------------------------------------------------
+    correlation_matrix = df[['Scarcity', 'Serendipity']].corr()
     fig = px.imshow(
         correlation_matrix,
         text_auto=".2f",
@@ -71,14 +75,10 @@ def app():
     )
     st.plotly_chart(fig, use_container_width=True)
 
-   # Calculate the average Scarcity and Serendipity scores by monthly_income
-   average_scores_by_income = (
-       df.groupby('monthly_income')[['Scarcity', 'Serendipity']]
-       .mean()
-       .reset_index()
-   )
-
-   # Define the order for income groups
+    # --------------------------------------------------
+    # Average scores by monthly_income
+    # --------------------------------------------------
+    average_scores_by_income = df.groupby('monthly_income')[['Scarcity', 'Serendipity']].mean().reset_index()
     income_order = ['Under RM100', 'RM100 - RM300', 'Over RM300']
     average_scores_by_income['monthly_income'] = pd.Categorical(
         average_scores_by_income['monthly_income'],
@@ -87,7 +87,6 @@ def app():
     )
     average_scores_by_income = average_scores_by_income.sort_values('monthly_income')
 
-    # Melt the DataFrame for Plotly
     melted_scores_income = average_scores_by_income.melt(
         id_vars='monthly_income',
         value_vars=['Scarcity', 'Serendipity'],
@@ -95,7 +94,6 @@ def app():
         value_name='Average_Score'
     )
 
-    # Create interactive bar chart
     fig = px.bar(
         melted_scores_income,
         x='monthly_income',
@@ -105,142 +103,58 @@ def app():
         text_auto='.2f',
         category_orders={'monthly_income': income_order},
         title='Average Scarcity and Serendipity Scores by Monthly Income',
-        labels={
-            'monthly_income': 'Monthly Income (in RM)',
-            'Average_Score': 'Average Score',
-            'Score_Type': 'Score Type'
-        },
-    width=900,
-    height=500
+        labels={'monthly_income': 'Monthly Income (RM)', 'Average_Score': 'Average Score', 'Score_Type': 'Score Type'},
+        width=900,
+        height=500
     )
-
-    fig.update_layout(
-        xaxis_tickangle=-45,
-        legend_title_text='Score Type'
-    )
-
+    fig.update_layout(xaxis_tickangle=-45, legend_title_text='Score Type')
     st.plotly_chart(fig, use_container_width=True)
 
-    # Calculate the average Scarcity and Serendipity scores by gender
-    average_scores_by_gender = (
-        df.groupby('gender')[['Scarcity', 'Serendipity']]
-        .mean()
-        .reset_index()
-    )
-
-    # Melt the DataFrame for Plotly
-    melted_scores = average_scores_by_gender.melt(
+    # --------------------------------------------------
+    # Average scores by gender
+    # --------------------------------------------------
+    average_scores_by_gender = df.groupby('gender')[['Scarcity', 'Serendipity']].mean().reset_index()
+    melted_scores_gender = average_scores_by_gender.melt(
         id_vars='gender',
         value_vars=['Scarcity', 'Serendipity'],
         var_name='Score_Type',
         value_name='Average_Score'
     )
 
-    # Create interactive bar chart
     fig = px.bar(
-        melted_scores,
+        melted_scores_gender,
         x='gender',
         y='Average_Score',
         color='Score_Type',
         barmode='group',
         text_auto='.2f',
         title='Average Scarcity and Serendipity Scores by Gender',
-        labels={
-            'gender': 'Gender',
-            'Average_Score': 'Average Score',
-            'Score_Type': 'Score Type'
-        },
-    width=800,
-    height=450
+        labels={'gender': 'Gender', 'Average_Score': 'Average Score', 'Score_Type': 'Score Type'},
+        width=800,
+        height=450
     )
+    fig.update_layout(legend_title_text='Score Type')
+    st.plotly_chart(fig, use_container_width=True)
 
-   fig.update_layout(
-       legend_title_text='Score Type'
-   )
+    # --------------------------------------------------
+    # Box plots
+    # --------------------------------------------------
+    fig = make_subplots(rows=1, cols=2, subplot_titles=["Distribution of Scarcity Score","Distribution of Serendipity Score"])
+    fig.add_trace(go.Box(y=df['Scarcity'], name='Scarcity', boxmean=True), row=1, col=1)
+    fig.add_trace(go.Box(y=df['Serendipity'], name='Serendipity', boxmean=True), row=1, col=2)
+    fig.update_layout(height=500, width=900, showlegend=False)
+    fig.update_yaxes(title_text="Scarcity Score", row=1, col=1)
+    fig.update_yaxes(title_text="Serendipity Score", row=1, col=2)
+    st.plotly_chart(fig, use_container_width=True)
 
-   st.plotly_chart(fig, use_container_width=True)
-
-   # Create subplots: 1 row, 2 columns
-   fig = make_subplots(
-       rows=1, cols=2,
-       subplot_titles=[
-           "Distribution of Scarcity Score",
-           "Distribution of Serendipity Score"
-       ]
-   )
-
-   # Box plot for Scarcity
-  fig.add_trace(
-      go.Box(
-          y=df['Scarcity'],
-          name='Scarcity',
-          boxmean=True
-      ),
-    row=1, col=1
-  )
-
- # Box plot for Serendipity
- fig.add_trace(
-     go.Box(
-        y=df['Serendipity'],
-        name='Serendipity',
-        boxmean=True
-    ),
-    row=1, col=2
- )
-
-# Layout adjustments
-fig.update_layout(
-    height=500,
-    width=900,
-    showlegend=False
-)
-
-fig.update_yaxes(title_text="Scarcity Score", row=1, col=1)
-fig.update_yaxes(title_text="Serendipity Score", row=1, col=2)
-
-st.plotly_chart(fig, use_container_width=True)
-
-# Create subplots
-fig = make_subplots(
-    rows=1, cols=2,
-    subplot_titles=[
-        "Distribution of Scarcity Score",
-        "Distribution of Serendipity Score"
-    ]
-)
-
-# Histogram for Scarcity
-fig.add_trace(
-    go.Histogram(
-        x=df['Scarcity'],
-        nbinsx=5,
-        name='Scarcity',
-        opacity=0.75
-    ),
-    row=1, col=1
-)
-
-# Histogram for Serendipity
-fig.add_trace(
-    go.Histogram(
-        x=df['Serendipity'],
-        nbinsx=5,
-        name='Serendipity',
-        opacity=0.75
-    ),
-    row=1, col=2
-)
-
-# Layout adjustments
-fig.update_layout(
-    height=500,
-    width=950,
-    showlegend=False
-)
-
-fig.update_xaxes(title_text="Scarcity Score", row=1, col=1)
-fig.update_xaxes(title_text="Serendipity Score", row=1, col=2)
-fig.update_yaxes(title_text="Frequency")
-
-st.plotly_chart(fig, use_container_width=True)
+    # --------------------------------------------------
+    # Histograms
+    # --------------------------------------------------
+    fig = make_subplots(rows=1, cols=2, subplot_titles=["Distribution of Scarcity Score","Distribution of Serendipity Score"])
+    fig.add_trace(go.Histogram(x=df['Scarcity'], nbinsx=5, name='Scarcity', opacity=0.75), row=1, col=1)
+    fig.add_trace(go.Histogram(x=df['Serendipity'], nbinsx=5, name='Serendipity', opacity=0.75), row=1, col=2)
+    fig.update_layout(height=500, width=950, showlegend=False)
+    fig.update_xaxes(title_text="Scarcity Score", row=1, col=1)
+    fig.update_xaxes(title_text="Serendipity Score", row=1, col=2)
+    fig.update_yaxes(title_text="Frequency")
+    st.plotly_chart(fig, use_container_width=True)
