@@ -18,14 +18,6 @@ url = 'https://raw.githubusercontent.com/nurinn-bot/SV-TT/refs/heads/main/TikTok
 
 df = pd.read_csv(url)
 
-# Calculate the counts and reset the index to create a Plotly-friendly DataFrame
-# Assumes the loaded CSV has a column named 'Gender'
-gender_counts_df = df['gender'].value_counts().reset_index()
-gender_counts_df.columns = ['gender', 'Count']
-
-st.write("Data summary (Counts):")
-st.dataframe(gender_counts_df, hide_index=True)
-
 df['Scarcity'] = df[[
  'promo_deadline_focus',
  'promo_time_worry',
