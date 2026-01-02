@@ -64,3 +64,27 @@ df['ImpulseBuying'] = df[[
  'impulse_purchase'
 ]].mean(axis=1)
 
+# Create a sub-dataframe with only 'Scarcity' and 'Serendipity'
+correlation_data = df[['Scarcity', 'Serendipity']]
+
+# Calculate the correlation matrix
+correlation_matrix = correlation_data.corr()
+
+# Create interactive heatmap
+fig = px.imshow(
+    correlation_matrix,
+    text_auto=".2f",
+    color_continuous_scale="RdBu",
+    zmin=-1,
+    zmax=1,
+    width=600,
+    height=500
+)
+
+fig.update_layout(
+    title="Correlation Heatmap Between Scarcity and Serendipity Scores",
+    xaxis_title="Variables",
+    yaxis_title="Variables"
+)
+
+fig.show()
